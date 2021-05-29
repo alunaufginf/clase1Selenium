@@ -1,12 +1,17 @@
 package pe.visorweb.categoria;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import pe.visorweb.driver.CrearDriver;
+import pe.visorweb.driver.tipos.Navegador;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class TestCategoria
@@ -14,16 +19,26 @@ public class TestCategoria
     private static WebDriver driver;
     private String url = "http://localhost:8080/VisorWeb/index.xhtml";
 
+    @BeforeAll
+    public static void configurarDriver(){
+        /*//1. configurar el driver
+        WebDriverManager.firefoxdriver().setup();
+        //lo descarga y lo enlaza al proyecto para poder usarlo
+        //2- instanciamos el driver
+        driver = new FirefoxDriver();
+        //3. maximizar el navegador
+        driver.manage().window().maximize();*/
+        driver = CrearDriver.getDriver(Navegador.CHROME);
+    }
+    @AfterAll
+    public static void cerrarDriver(){
+        driver.close();
+    }
+
     @Test
     public void testInsertarCategoriaExitosa(){
         try{
-            //1. configurar el driver
-            WebDriverManager.firefoxdriver().setup();
-            //lo descarga y lo enlaza al proyecto para poder usarlo
-            //2- instanciamos el driver
-            driver = new FirefoxDriver();
-            //3. maximizar el navegador
-            driver.manage().window().maximize();
+
 
             //1.  cargar página visorweb
             driver.get(url);
@@ -46,7 +61,7 @@ public class TestCategoria
             driver.findElement(By.linkText("Mnt. de Categoría")).click();
             driver.findElement(By.id("btnNuevo")).click();
             driver.findElement(By.id("txtNombre")).clear();
-            driver.findElement(By.id("txtNombre")).sendKeys("Selenium Web Driver2");
+            driver.findElement(By.id("txtNombre")).sendKeys("Selenium Web Driver");
             driver.findElement(By.id("btnGuardar")).click();
 
             Thread.sleep(2000);
@@ -57,10 +72,6 @@ public class TestCategoria
             //Es un punto de verificación, si son iguales los mensajes el TEST PASA
             assertEquals(mensajeEsperado, mensajeObtenido);
 
-            driver.close();
-
-
-
         }catch (Exception e){
             e.printStackTrace();
             fail();
@@ -69,13 +80,6 @@ public class TestCategoria
     @Test
     public void testInsertarCategoriaDatosVacios(){
         try{
-            //1. configurar el driver
-            WebDriverManager.firefoxdriver().setup();
-            //lo descarga y lo enlaza al proyecto para poder usarlo
-            //2- instanciamos el driver
-            driver = new FirefoxDriver();
-            //3. maximizar el navegador
-            driver.manage().window().maximize();
 
             //1.  cargar página visorweb
             driver.get(url);
@@ -109,13 +113,10 @@ public class TestCategoria
             //Es un punto de verificación, si son iguales los mensajes el TEST PASA
             assertEquals(mensajeEsperado, mensajeObtenido);
 
-            driver.close();
-
-
-
         }catch (Exception e){
             e.printStackTrace();
             fail();
         }
     }
 }
+
